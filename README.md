@@ -1,51 +1,70 @@
-# jewel-ijp-template
+# Jewel IJP 251+ plugin template
+             
+This plugin shows how to build an IntelliJ Platform using the platform-provided Jewel and Compose dependencies.
+Since Jewel and Compose have been added to the IJP in the 2025.1 version, if you plan on targeting earlier versions of
+IJP, you'll need to bring in the same versions of Jewel and Compose manually for those other versions.
 
-![Build](https://github.com/rock3r/jewel-ijp-template/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/MARKETPLACE_ID.svg)](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID)
+In a nutshell, on top of a basic IJ plugin setup, you need:
+1. Kotlin, Compose Compiler, and Compose Multiplatform Gradle plugins (Java not needed)
+2. The `google()` and Jewel dev Maven repo in your [`repositories`](build.gradle.kts)
+3. The Compose, Skiko, and Jewel `bundledModule`s in your [`dependencies.intellijPlatform`](build.gradle.kts)
+4. The same dependencies in your [`plugin.xml`](src/main/resources/META-INF/plugin.xml)) as modules
+5. Making sure you're matching the Jewel and Compose versions used in the target IJP version (the easiest way to find
+   those out is by looking [here](https://github.com/JetBrains/intellij-community/blob/master/platform/jewel/gradle/libs.versions.toml))
+6. Some piece of code that contains Compose/Jewel UI 
 
-## Template ToDo list
-- [x] Create a new [IntelliJ Platform Plugin Template][template] project.
-- [ ] Get familiar with the [template documentation][template].
-- [ ] Adjust the [pluginGroup](./gradle.properties) and [pluginName](./gradle.properties), as well as the [id](./src/main/resources/META-INF/plugin.xml) and [sources package](./src/main/kotlin).
-- [ ] Adjust the plugin description in `README` (see [Tips][docs:plugin-description])
-- [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html?from=IJPluginTemplate).
-- [ ] [Publish a plugin manually](https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate) for the first time.
-- [ ] Set the `MARKETPLACE_ID` in the above README badges. You can obtain it once the plugin is published to JetBrains Marketplace.
-- [ ] Set the [Plugin Signing](https://plugins.jetbrains.com/docs/intellij/plugin-signing.html?from=IJPluginTemplate) related [secrets](https://github.com/JetBrains/intellij-platform-plugin-template#environment-variables).
-- [ ] Set the [Deployment Token](https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html?from=IJPluginTemplate).
-- [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
+## On multi-module setups
+If you have multiple modules, where the plugin is a leaf node using the Compose UI coming from another module, you have
+two options.
 
-<!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
+### 1. Make the parent node's dependencies compileOnly
+If you have something like this:
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
+```
+commonUiModule/
+├── intelliJPlugin
+└── otherFrontend
+```
 
-To keep everything working, do not remove `<!-- ... -->` sections. 
-<!-- Plugin description end -->
+Then you can make the Compose and Jewel dependencies in commonUiModule `compileOnly`, and then you can use the setup
+showcased by this repo for the IJP plugin. You'd then also need to add `implementation` dependencies for the other
+frontend module(s). Assuming the other frontend is _standalone_, you'll want to use the Jewel Standalone dependencies
+there.
 
-## Installation
+Note that's important to match the Jewel and Compose versions used by the target IJP version(s) to avoid problems. While
+they should be forwards compatible, caution is never a bad thing. Also, in the `commonUiModule` you MUST NOT use any
+leaf Jewel dependency (bridge or standalone) to avoid incompatibilities. Only use dependencies up to the `ui` layer of
+Jewel (and `core` for its Markdown renderer). You'll need to use the leaf-level (bridge or standalone) dependencies in
+the leaf modules — `intelliJPlugin` (provided by the IJP) and `otherFrontend`.
 
-- Using the IDE built-in plugin system:
-  
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "jewel-ijp-template"</kbd> >
-  <kbd>Install</kbd>
-  
-- Using JetBrains Marketplace:
+### 2. Exclude the parent's dependencies in the plugin module
+If you have `implementation` and/or `api`-level dependencies in your ui module that other modules depend on, and can't
+get rid of them, the best (or should we say, least painful) approach is to exclude all the transitive dependencies in
+your plugin's module:
 
-  Go to [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID) and install it by clicking the <kbd>Install to ...</kbd> button in case your IDE is running.
+```kotlin
+dependencies {
+    //...
 
-  You can also download the [latest release](https://plugins.jetbrains.com/plugin/MARKETPLACE_ID/versions) from JetBrains Marketplace and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
-
-- Manually:
-
-  Download the [latest release](https://github.com/rock3r/jewel-ijp-template/releases/latest) and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
-
+    implementation(projects.commonUiModule) {
+        // Excluding dependencies that the IJP 251+ provides already
+        exclude("androidx.annotation")
+        exclude("androidx.arch.core")
+        exclude("androidx.compose")
+        exclude("androidx.lifecycle")
+        exclude("org.jetbrains.compose")
+        exclude("org.jetbrains.compose.foundation")
+        exclude("org.jetbrains.compose.runtime")
+        exclude("org.jetbrains.compose.ui")
+        exclude("org.jetbrains.jewel")
+        exclude("org.jetbrains.kotlin")
+        exclude("org.jetbrains.kotlinx")
+        exclude("org.jetbrains.skiko")
+    }
+}
+```
 
 ---
-Plugin based on the [IntelliJ Platform Plugin Template][template].
+Plugin based on the [IntelliJ Platform Plugin Template][template], minus the unnecessary stuff, to keep it small.
 
 [template]: https://github.com/JetBrains/intellij-platform-plugin-template
-[docs:plugin-description]: https://plugins.jetbrains.com/docs/intellij/plugin-user-experience.html#plugin-description-and-presentation

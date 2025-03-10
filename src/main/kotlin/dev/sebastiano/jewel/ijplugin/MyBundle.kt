@@ -1,4 +1,4 @@
-package com.github.rock3r.jewelijptemplate
+package dev.sebastiano.jewel.ijplugin
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls

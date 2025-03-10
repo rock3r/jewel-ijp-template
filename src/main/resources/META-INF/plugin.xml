@@ -1,18 +1,27 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.rock3r.jewelijptemplate</id>
-    <name>jewel-ijp-template</name>
-    <vendor>rock3r</vendor>
+    <id>dev.sebastiano.jewel.ijplugin</id>
+    <name>Jewel IJP Plug‍in Template</name>
+    <vendor>Sebastiano Poggi</vendor>
 
-    <depends>com.intellij.modules.platform</depends>
+    <description><![CDATA[
+        Shows how you can build an IJP Plugin that supports IJP 251+ and uses the platform's
+        <a href="https://github.com/JetBrains/intellij-community/tree/master/platform/jewel">Jewel</a> and
+        Compose dependencies.
+    ]]></description>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.rock3r.jewelijptemplate.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-    </extensions>
+    <dependencies>
+        <plugin id="com.intellij.modules.platform"/>
+        <module name="intellij.platform.jewel.foundation"/>
+        <module name="intellij.platform.jewel.ui"/>
+        <module name="intellij.platform.jewel.ideLafBridge"/>
+        <module name="intellij.libraries.compose.foundation.desktop"/>
+        <module name="intellij.libraries.skiko"/>
+    </dependencies>
 
-    <applicationListeners>
-        <listener class="com.github.rock3r.jewelijptemplate.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
-    </applicationListeners>
+    <actions resource-bundle="messages.MyBundle">
+        <action id="dev.sebastiano.jewel.ijplugin.demo" class="dev.sebastiano.jewel.ijplugin.ComposeSampleAction"/>
+    </actions>
 </idea-plugin>
