@@ -1,6 +1,6 @@
 # Jewel IJP 251+ plugin template
              
-This plugin shows how to build an IntelliJ Platform using the platform-provided Jewel and Compose dependencies.
+This plugin shows how to build an IntelliJ Platform Plugin using the platform-provided Jewel and Compose dependencies.
 Since Jewel and Compose have been added to the IJP in the 2025.1 version, if you plan on targeting earlier versions of
 IJP, you'll need to bring in the same versions of Jewel and Compose manually for those other versions.
 
