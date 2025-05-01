@@ -1,0 +1,7 @@
+<idea-plugin>
+    <resource-bundle>messages.MyBundle</resource-bundle>
+
+    <actions resource-bundle="messages.MyBundle">
+        <action id="dev.sebastiano.jewel.ijplugin.demo" class="dev.sebastiano.jewel.ijplugin.ComposeSampleAction"/>
+    </actions>
+</idea-plugin>

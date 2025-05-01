@@ -1,16 +1,14 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
-<idea-plugin>
+<!--suppress PluginXmlPluginLogo --> <!-- The plugin icon comes from core -->
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
     <id>dev.sebastiano.jewel.ijplugin</id>
     <name>Jewel IJP Plug‍in Template</name>
     <vendor>Sebastiano Poggi</vendor>
 
     <description><![CDATA[
-        Shows how you can build an IJP Plugin that supports IJP 251+ and uses the platform's
+        Shows how you can build an IJP Plugin that supports IJP 243 (and 251) and uses the platform's
         <a href="https://github.com/JetBrains/intellij-community/tree/master/platform/jewel">Jewel</a> and
         Compose dependencies.
     ]]></description>
-
-    <resource-bundle>messages.MyBundle</resource-bundle>
 
     <dependencies>
         <plugin id="com.intellij.modules.platform"/>
@@ -21,7 +19,5 @@
         <module name="intellij.libraries.skiko"/>
     </dependencies>
 
-    <actions resource-bundle="messages.MyBundle">
-        <action id="dev.sebastiano.jewel.ijplugin.demo" class="dev.sebastiano.jewel.ijplugin.ComposeSampleAction"/>
-    </actions>
+    <xi:include href="/META-INF/plugin-core.xml"/>
 </idea-plugin>

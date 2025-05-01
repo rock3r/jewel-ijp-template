@@ -1,17 +1,20 @@
 [versions]
 # libraries
-compose-multiplatform = "1.8.0-alpha04" # aligned with IJP 251
+jewel = "0.27.0"
 junit = "4.13.2"
 
 # plugins
 intelliJPlatform = "2.5.0"
-kotlin = "2.1.10"
+kotlin = "2.1.10"  # aligned with IJP 251
 
 [libraries]
-junit = { group = "junit", name = "junit", version.ref = "junit" }
+jewel-ideLafBridge = { module = "org.jetbrains.jewel:jewel-ide-laf-bridge-243", version.ref = "jewel" }
+junit = { module = "junit:junit", version.ref = "junit" }
+
+# Plugin libraries for build-logic's convention plugins to use to resolve the types/tasks coming from these plugins
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
-intelliJPlatform = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+intelliJPlugin = { id = "org.jetbrains.intellij.platform", version.ref = "intelliJPlatform" }
+intelliJModule = { id = "org.jetbrains.intellij.platform.module", version.ref = "intelliJPlatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }

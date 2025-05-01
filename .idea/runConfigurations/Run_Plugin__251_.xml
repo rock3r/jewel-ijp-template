@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run Plugin" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Run Plugin (251)" type="GradleRunConfiguration" factoryName="Gradle">
     <log_file alias="IDE logs" path="$PROJECT_DIR$/build/idea-sandbox/*/log/idea.log" show_all="true" />
     <ExternalSystemSettings>
       <option name="executionName" />
@@ -11,7 +11,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="runIde" />
+          <option value="plugin-251:runIde" />
         </list>
       </option>
       <option name="vmOptions" value="" />
