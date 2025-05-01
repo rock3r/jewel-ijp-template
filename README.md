@@ -1,4 +1,7 @@
 # Jewel IJP 251+ plugin template
+
+> [!NOTE]
+> If you want to also target 243 at the same time, you can look at the solution in [this branch](https://github.com/rock3r/jewel-ijp-template/tree/243-and-251-compat)
              
 This plugin shows how to build an IntelliJ Platform Plugin using the platform-provided Jewel and Compose dependencies.
 Since Jewel and Compose have been added to the IJP in the 2025.1 version, if you plan on targeting earlier versions of
