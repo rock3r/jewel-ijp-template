@@ -15,8 +15,7 @@ repositories {
 }
 
 val rootProperties = Properties()
-
-project.file("../gradle.properties").inputStream().use { rootProperties.load(it) }
+rootProject.file("gradle.properties").inputStream().use { rootProperties.load(it) }
 
 dependencies {
   testImplementation(libs.junit)
